@@ -1,0 +1,17 @@
+---
+# force the login screen to use Xorg (required by NICE-DCV)
+- name: GDM3 disable Wayland protocol
+  ansible.builtin.lineinfile:
+    path: /etc/gdm3/custom.conf
+    regexp: "^(#).*WaylandEnable="
+    line: "WaylandEnable=false"
+  become: true
+  register: wayland
+  notify: Restart X11
+
+- name: Restart gdm3 to apply change to Wayland protocol
+  ansible.builtin.service:
+    name: gdm3
+    state: "{{ wayland.changed | ternary('restarted', 'started') }}"
+  become: true
+  notify: Restart X11

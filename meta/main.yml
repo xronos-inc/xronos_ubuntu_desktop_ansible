@@ -1,0 +1,12 @@
+galaxy_info:
+  role_name: xronos_ubuntu_desktop_ansible
+  author: Xronos, Inc.
+  description: "Ansible role to install Ubuntu Desktop"
+  license: proprietery
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+collections:
+  - community.general

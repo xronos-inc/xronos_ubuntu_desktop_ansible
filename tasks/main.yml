@@ -1,0 +1,35 @@
+---
+- name: Apt update cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600 # 1 hr
+  become: true
+
+- name: Apt install Ubuntu Desktop
+  ansible.builtin.apt:
+    pkg:
+      - ubuntu-desktop
+      - gdm3
+  become: true
+  notify: Restart X11
+
+- name: Configure GDM3
+  ansible.builtin.include_tasks: gdm3.yml
+
+- name: Install Firefox for interactive web browsing
+  community.general.snap:
+    name: firefox
+  become: true
+  when: ubuntu_desktop_install_firefox
+
+- name: Configure desktop wallpaper
+  ansible.builtin.import_tasks: wallpaper.yml
+  when: ubuntu_desktop_configure_wallpaper
+
+- name: Query restart required
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: stat_result
+  changed_when: stat_result.stat.exists
+  notify:
+    - Restart server

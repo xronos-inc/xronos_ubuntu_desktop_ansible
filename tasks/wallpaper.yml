@@ -1,0 +1,20 @@
+---
+- name: Copy desktop wallpaper
+  ansible.builtin.copy:
+    src: desktop-background.jpg
+    dest: "{{ ansible_env.HOME }}/.wallpaper.jpg"
+
+- name: Set wallpaper
+  ansible.builtin.dconf:
+    key: /org/gnome/desktop/background/picture-uri
+    value: "'file:///{{ ansible_env.HOME }}/.wallpaper.jpg'"
+
+- name: Copy lock screen
+  ansible.builtin.copy:
+    src: desktop-lockscreen.jpg
+    dest: "{{ ansible_env.HOME }}/.lockscreen.jpg"
+
+- name: Set wallpaper
+  ansible.builtin.dconf:
+    key: /org/gnome/desktop/screensaver/picture-uri
+    value: "'file:///{{ ansible_env.HOME }}/.lockscreen.jpg'"
