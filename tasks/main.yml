@@ -14,13 +14,10 @@
   notify: Restart X11
 
 - name: Configure GDM3
-  ansible.builtin.include_tasks: gdm3.yml
+  ansible.builtin.import_tasks: gdm3.yml
 
-- name: Install Firefox for interactive web browsing
-  community.general.snap:
-    name: firefox
-  become: true
-  when: ubuntu_desktop_install_firefox
+- name: Configure Ubuntu-Dock
+  ansible.builtin.import_tasks: ubuntu-dock.yml
 
 - name: Configure desktop wallpaper
   ansible.builtin.import_tasks: wallpaper.yml

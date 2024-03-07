@@ -1,0 +1,16 @@
+---
+- name: Install ubuntu-dock
+  ansible.builtin.command:
+    cmd: gnome-extensions install ubuntu-dock@ubuntu.com
+    creates: /usr/share/gnome-shell/extensions/ubuntu-dock@ubuntu.com
+
+- name: Query Gnome extension ubuntu-dock
+  ansible.builtin.command:
+    cmd: gnome-extensions info ubuntu-dock@ubuntu.com
+  changed_when: false
+  register: ubuntu_dock
+
+- name: Gnome enable extension ubuntu-dock
+  ansible.builtin.command:
+    cmd: gnome-extensions enable ubuntu-dock@ubuntu.com
+  when: ubuntu_dock.stdout is not search('(?i)state\s*:\s*enabled')
