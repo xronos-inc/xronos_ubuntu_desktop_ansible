@@ -8,7 +8,7 @@
 - name: Apt install Ubuntu Desktop
   ansible.builtin.apt:
     pkg:
-      - ubuntu-desktop
+      - ubuntu-desktop-minimal
       - gdm3
   become: true
   notify: Restart X11
