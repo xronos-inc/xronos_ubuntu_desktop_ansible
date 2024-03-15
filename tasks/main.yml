@@ -16,9 +16,6 @@
 - name: Configure GDM3
   ansible.builtin.import_tasks: gdm3.yml
 
-- name: Configure Ubuntu-Dock
-  ansible.builtin.import_tasks: ubuntu-dock.yml
-
 - name: Configure desktop wallpaper
   ansible.builtin.import_tasks: wallpaper.yml
   when: ubuntu_desktop_configure_wallpaper
