@@ -13,11 +13,12 @@
   become: true
   notify: Restart X11
 
-- name: Configure GDM3
-  ansible.builtin.import_tasks: gdm3.yml
+- name: Disable Wayland protocol
+  ansible.builtin.include_tasks: disable-wayland.yml
+  when: ubuntu_desktop_disable_wayland
 
 - name: Configure desktop wallpaper
-  ansible.builtin.import_tasks: wallpaper.yml
+  ansible.builtin.include_tasks: wallpaper.yml
   when: ubuntu_desktop_configure_wallpaper
 
 - name: Query restart required
