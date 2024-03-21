@@ -21,6 +21,10 @@
   ansible.builtin.include_tasks: wallpaper.yml
   when: ubuntu_desktop_configure_wallpaper
 
+- name: Configure Gnome shell on login
+  ansible.builtin.include_tasks: xdg-rc.yml
+  when: ubuntu_desktop_xdg_rc
+
 - name: Query restart required
   ansible.builtin.stat:
     path: /var/run/reboot-required
