@@ -32,3 +32,9 @@
   changed_when: stat_result.stat.exists
   notify:
     - Restart server
+
+- name: Install firefox
+  community.general.snap:
+    name: firefox
+    classic: true
+  become: true
