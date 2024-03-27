@@ -38,3 +38,10 @@
     name: firefox
     classic: true
   become: true
+
+- name: Disable cups-browsed
+  ansible.builtin.service:
+    name: cups-browsed
+    enabled: false
+    state: stopped
+  become: true
