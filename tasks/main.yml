@@ -33,10 +33,22 @@
   notify:
     - Restart server
 
+- name: Install stap-store
+  community.general.snap:
+    name: snap-store
+  become: true
+
 - name: Install firefox
   community.general.snap:
     name: firefox
     classic: true
+  become: true
+
+- name: Enable filefox desktop shortcut
+  ansible.builtin.lineinfile:
+    path: /usr/share/applications/firefox.desktop
+    regexp: "^NoDisplay=*"
+    line: "NoDisplay=false"
   become: true
 
 - name: Disable cups-browsed
