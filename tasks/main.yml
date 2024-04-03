@@ -10,6 +10,7 @@
     pkg:
       - ubuntu-desktop-minimal
       - gdm3
+    install_recommends: false
   become: true
   notify: Restart X11
 
@@ -33,27 +34,13 @@
   notify:
     - Restart server
 
-- name: Install stap-store
-  community.general.snap:
-    name: snap-store
+- name: Install gnome-software
+  ansible.builtin.apt:
+    pkg:
+      - gnome-software
+      - gnome-software-plugin-snap
   become: true
 
-- name: Install firefox
-  community.general.snap:
-    name: firefox
-    classic: true
-  become: true
-
-- name: Enable filefox desktop shortcut
-  ansible.builtin.lineinfile:
-    path: /usr/share/applications/firefox.desktop
-    regexp: "^NoDisplay=*"
-    line: "NoDisplay=false"
-  become: true
-
-- name: Disable cups-browsed
-  ansible.builtin.service:
-    name: cups-browsed
-    enabled: false
-    state: stopped
-  become: true
+- name: Install Firefox
+  when: ubuntu_desktop_install_firefox
+  ansible.builtin.include_tasks: firefox.yml

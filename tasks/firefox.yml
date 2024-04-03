@@ -1,0 +1,17 @@
+---
+- name: Install firefox
+  community.general.snap:
+    name: firefox
+    classic: true
+  become: true
+
+- name: Create directory ~/.local/share/applications
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications"
+    state: directory
+    recurse: true
+
+- name: Add firefox desktop shortcut
+  ansible.builtin.template:
+    src: Firefox.desktop.j2
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/Firefox.desktop"
