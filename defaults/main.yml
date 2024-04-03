@@ -3,4 +3,4 @@ ubuntu_desktop_configure_wallpaper: true
 ubuntu_desktop_install_firefox: true
 ubuntu_desktop_disable_wayland: true
 ubuntu_desktop_xdg_rc: true
-ubuntu_desktop_use_x11_dummy: true
+ubuntu_desktop_use_x11_dummy: false
