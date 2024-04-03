@@ -10,7 +10,6 @@
     pkg:
       - ubuntu-desktop-minimal
       - gdm3
-    install_recommends: false
   become: true
   notify: Restart X11
 
@@ -44,3 +43,7 @@
 - name: Install Firefox
   when: ubuntu_desktop_install_firefox
   ansible.builtin.include_tasks: firefox.yml
+
+- name: Install X11 Video Dummy
+  when: ubuntu_desktop_use_x11_dummy
+  ansible.builtin.include_tasks: x11-dummy.yml

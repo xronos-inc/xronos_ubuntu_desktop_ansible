@@ -1,0 +1,12 @@
+---
+- name: Apt install xserver-xorg-video-dummy
+  ansible.builtin.apt:
+    pkg: xserver-xorg-video-dummy
+  become: true
+
+- name: Write dummy driver to X11 xorg.conf
+  ansible.builtin.copy:
+    src: xorg.dummy.conf
+    dest: /etc/X11/xorg.conf
+  become: true
+  notify: Restart X11
