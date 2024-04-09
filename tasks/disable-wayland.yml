@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: © 2024 Xronos Inc.
+# SPDX-License-Identifier: BSD-3-Clause
 ---
 # force the login screen to use Xorg (required by NICE-DCV)
 - name: GDM3 disable Wayland protocol
