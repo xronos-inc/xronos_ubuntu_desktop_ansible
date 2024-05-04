@@ -10,8 +10,125 @@
 - name: Apt install Ubuntu Desktop
   ansible.builtin.apt:
     pkg:
-      - ubuntu-desktop-minimal
+      # required by ubuntu-desktop-minimal
+      - alsa-base
+      - alsa-utils
+      - anacron
+      - at-spi2-core
+      - bc
+      - ca-certificates
+      - dmz-cursor-theme
+      - fonts-dejavu-core
+      - fonts-freefont-ttf
       - gdm3
+      - gnome-control-center
+      - gnome-menus
+      - gnome-session-canberra
+      - gnome-settings-daemon
+      - gnome-shell
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-desktop-icons-ng
+      - gnome-shell-extension-ubuntu-dock
+      - gstreamer1.0-alsa
+      - gstreamer1.0-packagekit
+      - gstreamer1.0-plugins-base-apps
+      - gstreamer1.0-pulseaudio
+      - inputattach
+      - libatk-adaptor
+      - libnotify-bin
+      - libsasl2-modules
+      - libu2f-udev
+      - nautilus
+      - pulseaudio
+      - rfkill
+      - software-properties-gtk
+      - spice-vdagent
+      - ubuntu-drivers-common
+      - ubuntu-session
+      - ubuntu-settings
+      - unzip
+      - wireless-tools
+      - wpasupplicant
+      - xdg-user-dirs
+      - xdg-user-dirs-gtk
+      - xkb-data
+      - xorg
+      - yelp
+      - zenity
+      - zip
+      # recommended by ubuntu-desktop-minimal
+      - acpi-support
+      - appstream
+      - apt-config-icons-hidpi
+      - avahi-autoipd
+      - avahi-daemon
+      - "{{ cloud_instance is defined and cloud_instance | ternary('bluez', '') }}"
+      - dirmngr
+      - firefox
+      - fonts-liberation
+      - fonts-liberation2
+      - fonts-noto-cjk
+      - fonts-noto-color-emoji
+      - fonts-opensymbol
+      - fonts-ubuntu
+      - fwupd
+      - fwupd-signed
+      - gedit
+      - gir1.2-gmenu-3.0
+      - "{{ cloud_instance is defined and cloud_instance | ternary('gnome-bluetooth', '') }}"
+      - gnome-calculator
+      - gnome-characters
+      - gnome-disk-utility
+      - gnome-keyring
+      - gnome-logs
+      - gnome-screenshot
+      - gnome-system-monitor
+      - gnome-terminal
+      - gpg-agent
+      - gsettings-ubuntu-schemas
+      - ibus
+      - ibus-gtk
+      - ibus-gtk3
+      - ibus-table
+      - im-config
+      - kerneloops
+      - libglib2.0-bin
+      - libnss-mdns
+      - libpam-fprintd
+      - libpam-gnome-keyring
+      - libpam-sss
+      - libproxy1-plugin-gsettings
+      - libproxy1-plugin-networkmanager
+      - mousetweaks
+      - network-manager
+      - network-manager-config-connectivity-ubuntu
+      - network-manager-openvpn-gnome
+      - plymouth-theme-spinner
+      - policykit-desktop-privileges
+      - snapd
+      - systemd-oomd
+      - ubuntu-report
+      - xcursor-themes
+      - xdg-desktop-portal-gnome
+      - xdg-desktop-portal-gtk
+      - xdg-utils
+      - yaru-theme-gnome-shell
+      - yaru-theme-gtk
+      - yaru-theme-icon
+      - yaru-theme-sound
+      # recommended by ubuntu-desktop
+      - baobab
+      - branding-ubuntu
+      # gnome metapackage
+      - gedit-plugin-bracket-completion
+      - gedit-plugin-code-comment
+      - gedit-plugins
+      - gnome-extra-icons
+      - gnome-software
+      - gnome-software-common
+      - gnome-software-plugin-snap
+      # additional packages
+      - libcanberra-gtk-module
   become: true
   notify: Restart X11
 
@@ -34,13 +151,6 @@
   changed_when: stat_result.stat.exists
   notify:
     - Restart server
-
-- name: Install gnome-software
-  ansible.builtin.apt:
-    pkg:
-      - gnome-software
-      - gnome-software-plugin-snap
-  become: true
 
 - name: Install Firefox
   when: ubuntu_desktop_install_firefox
