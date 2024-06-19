@@ -62,7 +62,7 @@
       - apt-config-icons-hidpi
       - avahi-autoipd
       - avahi-daemon
-      - "{{ cloud_instance is defined and cloud_instance | ternary('bluez', '') }}"
+      - bluez
       - dirmngr
       - firefox
       - fonts-liberation
@@ -75,7 +75,7 @@
       - fwupd-signed
       - gedit
       - gir1.2-gmenu-3.0
-      - "{{ cloud_instance is defined and cloud_instance | ternary('gnome-bluetooth', '') }}"
+      - gnome-bluetooth
       - gnome-calculator
       - gnome-characters
       - gnome-disk-utility
