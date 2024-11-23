@@ -1,0 +1,16 @@
+THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
+
+This project includes third-party software components, which are distributed under the
+following licenses. Full licenses and notices are provided in the
+[third-party-licenses](third-party-licenses) subdirectory.
+
+---
+
+Component: xRDP - Infamous Authentication Required
+Version: 2019-10-26
+License: LicenseRef-c-nergy.be-Custom-License
+License text: https://c-nergy.be/blog/?page_id=2030
+Source: https://c-nergy.be/blog/?p=14051
+
+For the full license text, see:
+[third-party-licenses/c_energy_xrdp_LICENSE](third-party-licenses/c_energy_xrdp_LICENSE)
