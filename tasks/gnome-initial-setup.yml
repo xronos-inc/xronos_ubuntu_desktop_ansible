@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
+# SPDX-License-Identifier: BSD-3-Clause
+---
+- name: Create directory /etc/skel/.config
+  become: true
+  ansible.builtin.file:
+    path: /etc/skel/.config
+    state: directory
+
+- name: Set global gnome-initial-setup-done
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/skel/.config/gnome-initial-setup-done
+    content: "yes"
+
+- name: Create directory ~/.config
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config"
+    state: directory
+
+- name: Set user gnome-initial-setup-done
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/gnome-initial-setup-done"
+    content: "yes"

@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
+# SPDX-License-Identifier: BSD-3-Clause
+---
+- name: Query apt packages
+  ansible.builtin.package_facts:
+    manager: apt
+
+- name: Stat /var/cache/xronos_ubuntu_desktop_ansible_installed
+  register: _installed
+  ansible.builtin.stat:
+    path: /var/cache/xronos_ubuntu_desktop_ansible_installed
+
+# metapackage ubuntu-desktop uses tasksel
+- name: Apt install tasksel
+  become: true
+  ansible.builtin.apt:
+    pkg: tasksel
+
+# verify the following are always installed:
+#   x-display-manager: gdm3
+#   x-session-manager: ubuntu-session
+#   x11: xorg
+- name: Apt install ubuntu-desktop-minimal{{ "=" ~ ubuntu_desktop_version if ubuntu_desktop_version else "" }}
+  when: ubuntu_desktop_reinstall
+        or not _installed.stat.exists
+        or "gdm3" not in ansible_facts.packages
+        or "ubuntu-session" not in ansible_facts.packages
+        or "xorg" not in ansible_facts.packages
+  notify: "xronos_ubuntu_desktop_ansible : Schedule reboot"
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - ubuntu-desktop-minimal{{ "=" ~ ubuntu_desktop_version if ubuntu_desktop_version else "" }}
+
+- name: Write /var/cache/xronos_ubuntu_desktop_ansible_installed
+  become: true
+  ansible.builtin.copy:
+    content: ""
+    dest: /var/cache/xronos_ubuntu_desktop_ansible_installed
+    force: false
+
+- name: Configure ~/.xsessionrc for Gnome shell
+  with_items:
+    - "export GNOME_SHELL_SESSION_MODE=ubuntu"
+    - "export XDG_CURRENT_DESKTOP=ubuntu:GNOME"
+    - "export XDG_CONFIG_DIRS=/etc/xdg"
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.xsessionrc"
+    line: "{{ item }}"
+    create: true
+
+- name: Perform scheduled reboot
+  ansible.builtin.import_tasks: reboot.yml

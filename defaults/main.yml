@@ -1,8 +1,11 @@
-# SPDX-FileCopyrightText: © 2024 Xronos Inc.
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
 # SPDX-License-Identifier: BSD-3-Clause
 ---
+ubuntu_desktop_disable_wayland: false
+ubuntu_desktop_configure_x11_dummy: false
+ubuntu_desktop_configure_x11_opengl: false
 ubuntu_desktop_configure_wallpaper: true
-ubuntu_desktop_install_firefox: true
-ubuntu_desktop_disable_wayland: true
-ubuntu_desktop_xdg_rc: true
-ubuntu_desktop_use_x11_dummy: false
+ubuntu_disable_gnome_initial_setup: true
+
+ubuntu_desktop_version: 
+ubuntu_desktop_reinstall: true

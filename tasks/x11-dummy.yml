@@ -1,14 +1,22 @@
-# SPDX-FileCopyrightText: © 2024 Xronos Inc.
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
 # SPDX-License-Identifier: BSD-3-Clause
 ---
 - name: Apt install xserver-xorg-video-dummy
+  become: true
   ansible.builtin.apt:
     pkg: xserver-xorg-video-dummy
-  become: true
 
 - name: Write dummy driver to X11 xorg.conf
+  register: _xorg_conf
+  become: true
   ansible.builtin.copy:
     src: xorg.dummy.conf
     dest: /etc/X11/xorg.conf
+
+- name: Restart X11
+  when: _xorg_conf.changed
   become: true
-  notify: Restart X11
+  ansible.builtin.shell:
+    cmd: >
+      systemctl isolate multi-user.target
+      && systemctl isolate graphical.target

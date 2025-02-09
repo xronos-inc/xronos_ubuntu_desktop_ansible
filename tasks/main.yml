@@ -1,51 +1,43 @@
-# SPDX-FileCopyrightText: © 2024 Xronos Inc.
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
 # SPDX-License-Identifier: BSD-3-Clause
 ---
 - name: Apt update cache
+  become: true
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600 # 1 hr
-  become: true
 
-- name: Apt install Ubuntu Desktop
-  ansible.builtin.apt:
-    pkg:
-      - ubuntu-desktop-minimal
-      - gdm3
-  become: true
-  notify: Restart X11
+- name: Install desktop packages
+  ansible.builtin.import_tasks: desktop-packages.yml
 
 - name: Disable Wayland protocol
-  ansible.builtin.include_tasks: disable-wayland.yml
   when: ubuntu_desktop_disable_wayland
+  ansible.builtin.include_tasks: wayland-disable.yml
+
+- name: Install X11 video dummy
+  when: ubuntu_desktop_configure_x11_dummy
+  ansible.builtin.include_tasks: x11-dummy.yml
+
+- name: Install X11 OpenGL
+  when: ubuntu_desktop_configure_x11_opengl
+  ansible.builtin.include_tasks: x11-opengl.yml
+
+# Avoids "Authentication is required to create color profile" on remote login
+# and enables basic package management.
+# see https://c-nergy.be/blog/?p=14051
+- name: Configure policy kit for remote users
+  become: true
+  with_items:
+    - 45-allow-colord.pkla
+    - 46-allow-update-repo.pkla
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/polkit-1/localauthority.conf.d/
+
+- name: Disable gnome-initial-setup
+  when: ubuntu_disable_gnome_initial_setup
+  ansible.builtin.include_tasks: gnome-initial-setup.yml
 
 - name: Configure desktop wallpaper
-  ansible.builtin.include_tasks: wallpaper.yml
   when: ubuntu_desktop_configure_wallpaper
-
-- name: Configure Gnome shell on login
-  ansible.builtin.include_tasks: xdg-rc.yml
-  when: ubuntu_desktop_xdg_rc
-
-- name: Query restart required
-  ansible.builtin.stat:
-    path: /var/run/reboot-required
-  register: stat_result
-  changed_when: stat_result.stat.exists
-  notify:
-    - Restart server
-
-- name: Install gnome-software
-  ansible.builtin.apt:
-    pkg:
-      - gnome-software
-      - gnome-software-plugin-snap
-  become: true
-
-- name: Install Firefox
-  when: ubuntu_desktop_install_firefox
-  ansible.builtin.include_tasks: firefox.yml
-
-- name: Install X11 Video Dummy
-  when: ubuntu_desktop_use_x11_dummy
-  ansible.builtin.include_tasks: x11-dummy.yml
+  ansible.builtin.include_tasks: wallpaper.yml

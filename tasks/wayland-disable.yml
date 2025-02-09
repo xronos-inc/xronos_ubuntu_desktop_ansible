@@ -1,19 +1,18 @@
-# SPDX-FileCopyrightText: © 2024 Xronos Inc.
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
 # SPDX-License-Identifier: BSD-3-Clause
 ---
-# force the login screen to use Xorg (required by NICE-DCV)
+# force the login screen to use x11 (required by NICE-DCV)
 - name: GDM3 disable Wayland protocol
+  register: _wayland
+  become: true
   ansible.builtin.lineinfile:
     path: /etc/gdm3/custom.conf
     regexp: "^(#).*WaylandEnable="
     line: "WaylandEnable=false"
-  become: true
-  register: wayland
-  notify: Restart X11
 
 - name: Restart gdm3 to apply change to Wayland protocol
+  when: _wayland.changed
+  become: true
   ansible.builtin.service:
     name: gdm3
-    state: "{{ wayland.changed | ternary('restarted', 'started') }}"
-  become: true
-  notify: Restart X11
+    state: "{{ _wayland.changed | ternary('restarted', 'started') }}"

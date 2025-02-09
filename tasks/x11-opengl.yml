@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
+# SPDX-License-Identifier: BSD-3-Clause
+---
+- name: Install x11-utils and OpenGL
+  register: _opengl
+  become: true
+  ansible.builtin.apt:
+    name:
+      - x11-utils
+      - libx11-dev
+      - mesa-utils
+
+# enable MIT-SHM extension which is used by opengl
+- name: Enable X11 extension MIT-SHM
+  register: _mit_shm
+  become: true
+  ansible.builtin.copy:
+    src: 20-mit-shm.conf
+    dest: /etc/X11/xorg.conf.d/
+
+- name: Restart X11
+  when: _opengl.changed or _mit_shm.changed
+  become: true
+  ansible.builtin.shell:
+    cmd: >
+      systemctl isolate multi-user.target
+      && systemctl isolate graphical.target
+
+- name: Restart gdm3
+  become: true
+  ansible.builtin.service:
+    name: gdm3
+    state: "{{ (_opengl.changed or _mit_shm.changed) 
+        | ternary('restarted', 'started') }}"
