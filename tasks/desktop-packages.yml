@@ -20,7 +20,7 @@
 #   x-display-manager: gdm3
 #   x-session-manager: ubuntu-session
 #   x11: xorg
-- name: Apt install ubuntu-desktop-minimal{{ "=" ~ ubuntu_desktop_version if ubuntu_desktop_version else "" }}
+- name: Apt install {{ ubuntu_desktop_package }}{{ "=" ~ ubuntu_desktop_version if ubuntu_desktop_version else "" }}
   when: ubuntu_desktop_reinstall
         or not _installed.stat.exists
         or "gdm3" not in ansible_facts.packages
@@ -30,7 +30,7 @@
   become: true
   ansible.builtin.apt:
     pkg:
-      - ubuntu-desktop-minimal{{ "=" ~ ubuntu_desktop_version if ubuntu_desktop_version else "" }}
+      - "{{ ubuntu_desktop_package }}{{ '=' ~ ubuntu_desktop_version if ubuntu_desktop_version else '' }}"
 
 - name: Write /var/cache/xronos_ubuntu_desktop_ansible_installed
   become: true

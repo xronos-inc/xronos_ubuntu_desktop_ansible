@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: (c) 2024 Xronos Inc.
 # SPDX-License-Identifier: BSD-3-Clause
 ---
+ubuntu_desktop_package: "ubuntu-desktop-minimal"
 ubuntu_desktop_disable_wayland: false
 ubuntu_desktop_configure_x11_dummy: false
 ubuntu_desktop_configure_x11_opengl: false
